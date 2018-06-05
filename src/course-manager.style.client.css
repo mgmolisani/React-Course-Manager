@@ -1,0 +1,41 @@
+.bg-purple {
+    background-color: rebeccapurple;
+}
+
+.list-group-item.active {
+    background-color: rebeccapurple;
+    border-color: rebeccapurple;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    color: rebeccapurple;
+    text-decoration: none;
+}
+
+.logo-font {
+    color: white !important;
+}
+
+.form-control:focus {
+    border-color: rebeccapurple;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: rebeccapurple;
+    border: rebeccapurple;
+}
+
+.btn-primary:hover {
+    background-color: mediumpurple;
+}
+
+.btn-primary:focus, .btn-primary:active {
+    background-color: rebeccapurple !important;
+    border: rebeccapurple !important;
+    box-shadow: none !important;
+}

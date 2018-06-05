@@ -1,35 +1,38 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
+/**
+ * Represents a course as a row in table.
+ */
 export default class CourseRow
     extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         let course = this.props.course;
         return (
-            <div className="row">
-                <div className="col-5">
+            <tr>
+                <th scope="row">
                     <Link to={`/course/${course.id}`}>
                         {course.title}
                     </Link>
-                </div>
-                <div className="col-2">
-                    {course.owner}
-                </div>
-                <div className="col-4">
+                    <span className="float-right"
+                                 onClick={(event) => {
+                                     this.props.update(course, event)
+                                 }}>
+                        <i className="fa fa-edit"/>
+                    </span>
+                </th>
+                <td>
+                    {course.author}
+                </td>
+                <td>
                     {new Date(course.modified).toDateString()}
-                </div>
-                <div className="col-1"
-                     onClick={() => {
-                         this.props.deleteCourse(course.id)
-                     }}>
+                </td>
+                <td onClick={(event) => {
+                         this.props.delete(course.id, event)}}>
                     <i className="fa fa-remove"/>
-                </div>
-            </div>
+                </td>
+            </tr>
         )
     }
 }
