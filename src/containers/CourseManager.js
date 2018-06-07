@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import CourseList from "./CourseList"
 import CourseEditor from "./CourseEditor";
-import Link from "react-router-dom/es/Link";
 
 /**
  * Sets up the course manager interface.
