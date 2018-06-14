@@ -8,6 +8,7 @@ import WidgetForm from "./widgetComponents/WidgetForm";
 import ParagraphWidgetForm from "./widgetComponents/ParagraphWidgetForm";
 import ParagraphWidget from "./widgetComponents/ParagraphWidget";
 
+
 const mapStateToProps = (state, ownProps) => (state);
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -47,7 +48,7 @@ class Widget
         }
     }
 
-    render(format, data) {
+    render() {
         if (this.props.previewWidgetsFlag
             || (this.props.widgetToEdit && this.props.widgetToEdit !== this.props.widget.id)) {
             return this.renderWidget();

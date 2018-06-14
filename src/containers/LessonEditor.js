@@ -3,6 +3,8 @@ import {reducer} from "../reducers/WidgetsReducer";
 import {createStore} from "redux";
 import {Provider} from "react-redux";
 import WidgetList from "./WidgetList";
+import {DragDropContextProvider} from "react-dnd";
+import HTML5Backend from 'react-dnd-html5-backend'
 
 const store = createStore(reducer);
 
@@ -18,9 +20,11 @@ export default class LessonEditor
         const lessonId = this.props.match.params.lessonId;
         return (
             <Provider store={store}>
-                <WidgetList courseId={courseId}
-                            moduleId={moduleId}
-                            lessonId={lessonId}/>
+                <DragDropContextProvider backend={HTML5Backend}>
+                    <WidgetList courseId={courseId}
+                                moduleId={moduleId}
+                                lessonId={lessonId}/>
+                </DragDropContextProvider>
             </Provider>
         );
     }
