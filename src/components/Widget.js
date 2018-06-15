@@ -7,7 +7,32 @@ import HeadingWidget from "./widgetComponents/HeadingWidget";
 import WidgetForm from "./widgetComponents/WidgetForm";
 import ParagraphWidgetForm from "./widgetComponents/ParagraphWidgetForm";
 import ParagraphWidget from "./widgetComponents/ParagraphWidget";
+import {DragLayer, DragSource} from "react-dnd";
 
+const WIDGET = 'WIDGET';
+
+const widgetSourceSpec = {
+    beginDrag(props) {
+        return {};
+    }
+};
+
+function collect(connect, monitor) {
+    return {
+        connectDragSource: connect.dragSource(),
+        connectDragPreview: connect.dragPreview(),
+        isDragging: monitor.isDragging()
+    }
+}
+
+function collect2(monitor) {
+    return {
+        item: monitor.getItem(),
+        itemType: monitor.getItemType(),
+        currentOffset: monitor.getSourceClientOffset(),
+        isDragging: monitor.isDragging()
+    };
+}
 
 const mapStateToProps = (state, ownProps) => (state);
 
@@ -52,77 +77,74 @@ class Widget
         if (this.props.previewWidgetsFlag
             || (this.props.widgetToEdit && this.props.widgetToEdit !== this.props.widget.id)) {
             return this.renderWidget();
-        }
-        return (
-            <Card className="my-3"
-                  draggable='true'
-                  onDragStart={(e)=>{
-                      e.dataTransfer.setData('text/plain', this.props.widget.id);
-                  }}
-                  onDragOver={(e)=>{
-                      e.preventDefault();
-                  }}
-            onDrop={(e)=> {
-                console.log(e.dataTransfer.getData('text'));
-                console.log(this.props.widget.id);
-            }}
-            onDragLeave={e => {
-                console.log(e);
-            }}>
-                <CardHeader className="form-inline">
-                    <div className="d-flex flex-wrap justify-content-between w-100">
-                        <div>
-                            <h2>{this.props.widget.name || this.props.widget.widgetType + ' Widget'}</h2>
-                        </div>
-                        <div className="d-flex align-items-center">
-                            <select className="form-control"
-                                    onChange={(event) => {
-                                        this.props.selectWidgetType(this.widgetTypeRef.value)
-                                    }}
-                                    value={this.props.widget.widgetType}
-                                    ref={node => this.widgetTypeRef = node}>
-                                <option>Paragraph</option>
-                                <option>Heading</option>
-                            </select>
-                            <span className={`float-right ml-3`}
-                                  onClick={this.props.toggleWidgetEdit}>
+        } else if (!this.props.isDragging) {
+            return (this.props.connectDragSource(
+                <div className="card my-3">
+                    <CardHeader className="form-inline">
+                        <div className="d-flex flex-wrap justify-content-between w-100">
+                            <div>
+                                <h2>{this.props.widget.name || this.props.widget.widgetType + ' Widget'}</h2>
+                            </div>
+                            <div className="d-flex align-items-center">
+                                <select className="form-control"
+                                        onChange={(event) => {
+                                            this.props.selectWidgetType(this.widgetTypeRef.value)
+                                        }}
+                                        value={this.props.widget.widgetType}
+                                        ref={node => this.widgetTypeRef = node}>
+                                    <option>Paragraph</option>
+                                    <option>Heading</option>
+                                </select>
+                                <span className={`float-right ml-3`}
+                                      onClick={this.props.toggleWidgetEdit}>
                                     <i className="fa fa-edit"/>
                                 </span>
-                            <span className={`float-right ml-3 ${this.props.widget.position === 0 ? 'd-none' : ''}`}
-                                  onClick={this.props.moveWidgetUp}>
+                                <span className={`float-right ml-3 ${this.props.widget.position === 0 ? 'd-none' : ''}`}
+                                      onClick={this.props.moveWidgetUp}>
                                     <i className="fa fa-arrow-up"/>
                                 </span>
-                            <span
-                                className={`float-right ml-3 ${this.props.widget.position === this.props.widgets.length - 1 ? 'd-none' : ''}`}
-                                onClick={this.props.moveWidgetDown}>
+                                <span
+                                    className={`float-right ml-3 ${this.props.widget.position === this.props.widgets.length - 1 ? 'd-none' : ''}`}
+                                    onClick={this.props.moveWidgetDown}>
                                     <i className="fa fa-arrow-down"/>
                                 </span>
-                            <span className="float-right ml-3"
-                                  onClick={this.props.deleteWidget}>
+                                <span className="float-right ml-3"
+                                      onClick={this.props.deleteWidget}>
                                     <i className="fa fa-remove"/>
                                 </span>
+                            </div>
                         </div>
-                    </div>
-                </CardHeader>
-                <CardBody>
-                    <Form>
-                        <WidgetForm widget={this.props.widget}/>
-                        {this.props.widget.widgetType === 'Heading' && <HeadingWidgetForm widget={this.props.widget}/>}
-                        {this.props.widget.widgetType === 'Paragraph' && <ParagraphWidgetForm widget={this.props.widget}/>}
-                    </Form>
-                </CardBody>
-                <CardFooter>
-                    <Label className="d-block">
-                        Preview
-                    </Label>
-                    {this.renderWidget()}
-                </CardFooter>
-            </Card>
-        )
+                    </CardHeader>
+                    <CardBody>
+                        <Form>
+                            <WidgetForm widget={this.props.widget}/>
+                            {this.props.widget.widgetType === 'Heading' &&
+                            <HeadingWidgetForm widget={this.props.widget}/>}
+                            {this.props.widget.widgetType === 'Paragraph' &&
+                            <ParagraphWidgetForm widget={this.props.widget}/>}
+                        </Form>
+                    </CardBody>
+                    <CardFooter>
+                        <Label className="d-block">
+                            Preview
+                        </Label>
+                        {this.renderWidget()}
+                    </CardFooter>
+                </div>
+            ))
+        } else {
+            return null;
+        }
     }
 }
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Widget);
+)(DragLayer(
+    collect2
+)(DragSource(
+    WIDGET,
+    widgetSourceSpec,
+    collect
+)(Widget)));
