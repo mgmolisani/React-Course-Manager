@@ -8,7 +8,7 @@ import {
     saveWidgets
 } from "../actions/WidgetActions";
 import Widget from "../components/Widget";
-import {FormGroup, Input, Label} from "reactstrap";
+import {Input, Label} from "reactstrap";
 import CustomDragLayer from "./CustomDragLayer";
 
 const mapStateToProps = (state, ownProps) => (state);

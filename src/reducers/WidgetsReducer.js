@@ -26,50 +26,64 @@ const widgetService = widgetServiceClient.instance;
 
 const compareWidgets = (a, b) => (a.position - b.position);
 
-const widgetsReducer = (state = [], action) => {
+const widgetsReducer = (state = {}, action) => {
     switch (action.type) {
         case ADD_WIDGET:
-            return [...state,
-                {
-                    id: Date.now(),
-                    text: '',
-                    widgetType: 'Paragraph',
-                    position: state.length,
-                    size: 2,
-                    name: 'New Widget',
-                    className: [],
-                    style: {
-                        keys: [],
-                        values: []
-                    }
-                }
-            ];
+            let id = Date.now();
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [id]:
+                        {
+                            id,
+                            text: '',
+                            widgetType: 'Paragraph',
+                            position: state.length,
+                            size: 2,
+                            name: 'New Widget',
+                            className: [],
+                            style: {
+                                keys: [],
+                                values: []
+                            }
+                        }
+                },
+                allIds: [...state.allIds, id]
+            };
         case DELETE_WIDGET:
-            return (() => {
-                let widgets = [...state];
-                let index = state.findIndex(widget => (widget.id === action.id));
-                widgets.splice(index, 1);
-                for (let i = index; i < widgets.length; i++) {
-                    widgets[i].position -= 1;
-                }
-                return widgets;
-            })();
+            return {
+                ...state,
+                byId: state.allIds.reduce((ids, key) => {
+                        if (key !== action.id) {
+                            ids[key] = state.byId[key];
+                        }
+                        return byId;
+                    }, {}),
+                allIds: state.allIds.filter(id => (id !== action.id))
+            };
         case FIND_ALL_WIDGETS:
             return action.widgets;
         case HEADING_SIZE_CHANGED:
-            return state.map(widget => {
-                if (widget.id === action.id) {
-                    widget.size = action.size;
+            return {
+                ...state,
+                byId: {
+                    [action.id]: {
+                        ...state.byId[action.id],
+                        size: action.size
+                    }
                 }
-                return widget;
-            });
+            };
         case WIDGET_TEXT_CHANGED:
-            return state.map(widget => {
-                if (widget.id === action.id) {
-                    widget.text = action.text;
+            return {
+                ...state,
+                byId: {
+                    [action.id]: {
+                        ...state.byId[action.id],
+                        text: action.text
+                    }
                 }
-                return widget;
-            });
+            };
         case SAVE_WIDGETS:
             widgetService
                 .saveAllWidgets(state, widgets => {
@@ -77,18 +91,21 @@ const widgetsReducer = (state = [], action) => {
                 });
             return state;
         case SELECT_WIDGET_TYPE:
-            return state.map(widget => {
-                if (widget.id === action.id) {
-                    widget.widgetType = action.widgetType;
+            return {
+                ...state,
+                byId: {
+                    [action.id]: {
+                        ...state.byId[action.id],
+                        widgetType: action.widgetType
+                    }
                 }
-                return widget;
-            });
+            };
         case MOVE_WIDGET:
             return (() => {
                 let sourceWidget = state.find(widget => (widget.id === action.id));
                 let sourcePosition = sourceWidget.position;
                 let targetPosition = action.position;
-                let direction =  sourcePosition - targetPosition;
+                let direction = sourcePosition - targetPosition;
                 let widgets = state.map((widget) => {
                     if (direction > 0
                         && widget.position >= targetPosition
@@ -106,53 +123,72 @@ const widgetsReducer = (state = [], action) => {
                 return widgets.sort(compareWidgets);
             })();
         case WIDGET_NAME_CHANGED:
-            return state.map(widget => {
-                if (widget.id === action.id) {
-                    widget.name = action.name;
+            return {
+                ...state,
+                byId: {
+                    [action.id]: {
+                        ...state.byId[action.id],
+                        name: action.name
+                    }
                 }
-                return widget;
-            });
+            };
         case WIDGET_CLASS_CHANGED:
-            return state.map(widget => {
-                if (widget.id === action.id) {
-                    widget.classToAdd = action.className;
+            return {
+                ...state,
+                byId: {
+                    [action.id]: {
+                        ...state.byId[action.id],
+                        classToAdd: action.classToAdd
+                    }
                 }
-                return widget;
-            });
+            };
         case ADD_WIDGET_CLASS:
-            return state.map(widget => {
-                if (widget.id === action.id
-                    && widget.classToAdd
-                    && !widget.className.includes(widget.classToAdd)) {
-                    widget.className.push(widget.classToAdd);
-                    widget.classToAdd = '';
+            return {
+                ...state,
+                byId: {
+                    [action.id]: (() => {
+                        const widget = {...state.byId[action.id]};
+                        if (!widget.className.includes(widget.classToAdd)) {
+                            return {
+                                ...widget,
+                                className: [...widget.className, widget.className],
+                                classToAdd: ''
+                            };
+                        }
+                        return {...widget};
+                    })()
                 }
-                return widget;
-            });
+            };
         case DELETE_WIDGET_CLASS:
-            return state.map(widget => {
-                if (widget.id === action.id) {
-                    widget.className = widget.className.filter((className) => (
-                        className !== action.className
-                    ));
+            return {
+                ...state,
+                byId: {
+                    [action.id]: {
+                        ...state.byId[action.id],
+                        className: state.byId[action.id].className.filter((className) => (
+                            className !== action.className
+                        ))
+                    }
                 }
-                return widget;
-            });
-        case WIDGET_STYLE_KEY_CHANGED:
+            };
+        case
+        WIDGET_STYLE_KEY_CHANGED:
             return state.map(widget => {
                 if (widget.id === action.id) {
                     widget.styleKeyToAdd = action.styleKey
                 }
                 return widget;
             });
-        case WIDGET_STYLE_VALUE_CHANGED:
+        case
+        WIDGET_STYLE_VALUE_CHANGED:
             return state.map(widget => {
                 if (widget.id === action.id) {
                     widget.styleValueToAdd = action.styleValue
                 }
                 return widget;
             });
-        case ADD_WIDGET_STYLE:
+        case
+        ADD_WIDGET_STYLE:
             return state.map(widget => {
                 if (widget.id === action.id
                     && widget.styleKeyToAdd
@@ -171,7 +207,8 @@ const widgetsReducer = (state = [], action) => {
                 }
                 return widget;
             });
-        case DELETE_WIDGET_STYLE:
+        case
+        DELETE_WIDGET_STYLE:
             return state.map(widget => {
                 if (widget.id === action.id) {
                     (() => {
