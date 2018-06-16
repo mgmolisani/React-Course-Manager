@@ -1,7 +1,7 @@
 import {
     ADD_WIDGET,
     ADD_WIDGET_CLASS,
-    ADD_WIDGET_STYLE,
+    ADD_WIDGET_STYLE, CONDENSE_WIDGETS,
     DELETE_WIDGET,
     DELETE_WIDGET_CLASS,
     DELETE_WIDGET_STYLE,
@@ -204,8 +204,18 @@ const editReducer = (state = null, action) => {
     }
 };
 
+const condenseReducer = (state = false, action) => {
+    switch (action.type) {
+        case CONDENSE_WIDGETS:
+            return !state;
+        default:
+            return state;
+    }
+};
+
 export const reducer = combineReducers({
     widgets: widgetsReducer,
     previewWidgetsFlag: previewReducer,
-    widgetToEdit: editReducer
+    widgetToEdit: editReducer,
+    condenseWidgetsFlag: condenseReducer
 });

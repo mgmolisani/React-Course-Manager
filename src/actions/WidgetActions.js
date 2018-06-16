@@ -2,7 +2,7 @@ import WidgetServiceClient from "../services/WidgetServiceClient";
 import {
     ADD_WIDGET,
     ADD_WIDGET_CLASS,
-    ADD_WIDGET_STYLE,
+    ADD_WIDGET_STYLE, CONDENSE_WIDGETS,
     DELETE_WIDGET,
     DELETE_WIDGET_CLASS,
     DELETE_WIDGET_STYLE,
@@ -123,4 +123,8 @@ export const deleteWidgetStyle = (id, styleKey) => ({
 export const toggleWidgetEdit = (id) => ({
     type: TOGGLE_WIDGET_EDIT,
     id
+});
+
+export const condenseWidgets = () => ({
+    type: CONDENSE_WIDGETS
 });

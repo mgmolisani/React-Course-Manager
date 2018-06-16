@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {addWidget, findAllWidgets, previewWidgets, saveWidgets} from "../actions/WidgetActions";
+import {addWidget, condenseWidgets, findAllWidgets, previewWidgets, saveWidgets} from "../actions/WidgetActions";
 import Widget from "../components/Widget";
-import {Input, Label} from "reactstrap";
+import {FormGroup, Input, Label} from "reactstrap";
+import CustomDragLayer from "./CustomDragLayer";
 
 const mapStateToProps = (state, ownProps) => (state);
 
@@ -21,6 +22,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
     previewWidgets: () => {
         dispatch(previewWidgets())
+    },
+
+    condenseWidgets: () => {
+        dispatch(condenseWidgets())
     }
 });
 
@@ -48,18 +53,33 @@ class WidgetList
                             <i className="fa fa-plus"/>
                         </button>
                     </div>
-                    <div className="d-flex align-items-center">
-                        Preview
-                        <Label className="switch m-1">
-                            <Input type="checkbox"
-                                   onClick={this.props.previewWidgets}
-                                   checked={this.props.previewWidgetsFlag}/>
-                            <span className="slider round"/>
-                        </Label>
-                    </div>
+                    <form className="d-flex align-items-center">
+                        <div className="row">
+                            <Label className="col-form-label">
+                                Condense
+                            </Label>
+                            <Label className="switch m-1">
+                                <Input type="checkbox"
+                                       onClick={this.props.condenseWidgets}
+                                       checked={this.props.condenseWidgetsFlag}
+                                       disabled={this.props.previewWidgetsFlag}/>
+                                <span className="slider round"/>
+                            </Label>
+                            <Label className="col-form-label ml-2">
+                                Preview
+                            </Label>
+                            <Label className="switch m-1">
+                                <Input type="checkbox"
+                                       onClick={this.props.previewWidgets}
+                                       checked={this.props.previewWidgetsFlag}/>
+                                <span className="slider round"/>
+                            </Label>
+                        </div>
+                    </form>
                 </div>
                 <hr className="mt-1"/>
-                <div>
+                <div className="position-relative">
+                    <CustomDragLayer/>
                     {this.props.widgets.map(widget => (
                         <Widget widget={widget}
                                 key={widget.id}/>
