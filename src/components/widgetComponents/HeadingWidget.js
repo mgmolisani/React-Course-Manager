@@ -8,26 +8,27 @@ class HeadingWidget
     extends AbstractStyledComponent {
 
     render() {
-        switch (this.props.widget.size) {
+        let widget = this.props.widgets.byId[this.props.widgetId];
+        switch (widget.size) {
             case 1:
                 return (
                     <h1 className={this.createClassName()}
                         style={this.createStyle()}>
-                        {this.props.widget.text}
+                        {widget.text}
                     </h1>
                 );
             case 2:
                 return (
                     <h2 className={this.createClassName()}
                         style={this.createStyle()}>
-                        {this.props.widget.text}
+                        {widget.text}
                     </h2>
                 );
             case 3:
                 return (
                     <h3 className={this.createClassName()}
                         style={this.createStyle()}>
-                        {this.props.widget.text}
+                        {widget.text}
                     </h3>
                 );
             default:

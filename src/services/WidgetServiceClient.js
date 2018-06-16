@@ -26,40 +26,25 @@ export default class WidgetServiceClient {
         return this[_singleton]
     }
 
-    /**
-     * Finds all widgets from the widget table.
-     * @param callback
-     * @returns {Promise<any>}
-     */
+
     findAllWidgets(callback) {
-        return [
-            {
-                id: 1,
-                widgetType: 'Paragraph',
-                position: 0,
-                text: 'hi',
-                size: 1,
-                name: 'graphyboy',
-                className: [],
-                style: {
-                    keys: [],
-                    values: []
-                }
+        let id = 1;
+        return {
+            byId: {
+                [id]:
+                    {
+                        id,
+                        text: '',
+                        widgetType: 'Paragraph',
+                        position: 0,
+                        size: 2,
+                        name: 'New Widget',
+                        className: [],
+                        style: {}
+                    }
             },
-            {
-                id: 2,
-                widgetType: 'Heading',
-                position: 1,
-                text: 'yo',
-                size: 2,
-                name: 'Heading',
-                className: [],
-                style: {
-                    keys: [],
-                    values: []
-                }
-            }
-        ];
+            allIds: [1]
+        }
         /*return fetch(LESSON_API_URL)
             .then(function (response) {
                 return response.json();

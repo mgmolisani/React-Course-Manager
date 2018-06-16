@@ -16,22 +16,22 @@ const mapStateToProps = (state, ownProps) => (state);
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
     widgetNameChanged: name => {
-        dispatch(widgetNameChanged(ownProps.widget.id, name));
+        dispatch(widgetNameChanged(ownProps.widgetId, name));
     },
     widgetClassChanged: className => {
-        dispatch(widgetClassChanged(ownProps.widget.id, className));
+        dispatch(widgetClassChanged(ownProps.widgetId, className));
     },
     addWidgetClass: () => {
-        dispatch(addWidgetClass(ownProps.widget.id));
+        dispatch(addWidgetClass(ownProps.widgetId));
     },
     widgetStyleKeyChanged: styleKey => {
-        dispatch(widgetStyleKeyChanged(ownProps.widget.id, styleKey));
+        dispatch(widgetStyleKeyChanged(ownProps.widgetId, styleKey));
     },
     widgetStyleValueChanged: styleValue => {
-        dispatch(widgetStyleValueChanged(ownProps.widget.id, styleValue));
+        dispatch(widgetStyleValueChanged(ownProps.widgetId, styleValue));
     },
     addWidgetStyle: () => {
-        dispatch(addWidgetStyle(ownProps.widget.id));
+        dispatch(addWidgetStyle(ownProps.widgetId));
     }
 });
 
@@ -39,32 +39,33 @@ class WidgetForm
     extends Component {
 
     render() {
+        let widget = this.props.widgets.byId[this.props.widgetId];
         return ([
-                <FormGroup key={'widget' + this.props.widget.id + 'Name'}>
-                    <Label htmlFor={'widget' + this.props.widget.id + 'NameFld'}>
+                <FormGroup key={'widget' + this.props.widgetId + 'Name'}>
+                    <Label htmlFor={'widget' + this.props.widgetId + 'NameFld'}>
                         Widget Name
                     </Label>
-                    <Input id={'widget' + this.props.widget.id + 'NameFld'}
+                    <Input id={'widget' + this.props.widgetId + 'NameFld'}
                            type="text"
                            onChange={(event) => {
                                this.props.widgetNameChanged(event.target.value);
                            }}
-                           defaultValue={this.props.widget.name}>
+                           defaultValue={widget.name}>
                     </Input>
                 </FormGroup>,
-                <Row key={'widget' + this.props.widget.id + 'Style'}>
+                <Row key={'widget' + this.props.widgetId + 'Style'}>
                     <Col xs="12" md="6">
                         <FormGroup>
-                            <Label htmlFor={'widget' + this.props.widget.id + 'ClassFld'}>
+                            <Label htmlFor={'widget' + this.props.widgetId + 'ClassFld'}>
                                 Classes
                             </Label>
-                            <Input id={'widget' + this.props.widget.id + 'ClassFld'}
+                            <Input id={'widget' + this.props.widgetId + 'ClassFld'}
                                    type="text"
                                    placeholder="Enter class name (e.g. container)"
                                    onChange={(event) => {
                                        this.props.widgetClassChanged(event.target.value);
                                    }}
-                                   value={this.props.widget.classToAdd || ''}>
+                                   value={widget.classToAdd || ''}>
                             </Input>
                             <Button color="primary"
                                     type="button"
@@ -73,28 +74,28 @@ class WidgetForm
                                 <i className="fa fa-plus"/>
                             </Button>
                         </FormGroup>
-                        <ClassList widget={this.props.widget}/>
+                        <ClassList widgetId={this.props.widgetId}/>
                     </Col>
                     <Col xs="12" md="6" >
                         <FormGroup>
-                            <Label htmlFor={'widget' + this.props.widget.id + 'StyleKeyFld'}>
+                            <Label htmlFor={'widget' + this.props.widgetId + 'StyleKeyFld'}>
                                 Styles
                             </Label>
-                            <Input id={'widget' + this.props.widget.id + 'StyleKeyFld'}
+                            <Input id={'widget' + this.props.widgetId + 'StyleKeyFld'}
                                    type="text"
                                    placeholder="Enter style key (e.g. backgroundColor)"
                                    onChange={(event) => {
                                        this.props.widgetStyleKeyChanged(event.target.value);
                                    }}
-                                   value={this.props.widget.styleKeyToAdd || ''}>
+                                   value={widget.styleKeyToAdd || ''}>
                             </Input>
-                            <Input id={'widget' + this.props.widget.id + 'StyleValueFld'}
+                            <Input id={'widget' + this.props.widgetId + 'StyleValueFld'}
                                    type="text"
                                    placeholder="Enter style value (e.g. blue)"
                                    onChange={(event) => {
                                        this.props.widgetStyleValueChanged(event.target.value);
                                    }}
-                                   value={this.props.widget.styleValueToAdd || ''}>
+                                   value={widget.styleValueToAdd || ''}>
                             </Input>
                             <Button color="primary"
                                     type="button"
@@ -103,7 +104,7 @@ class WidgetForm
                                 <i className="fa fa-plus"/>
                             </Button>
                         </FormGroup>
-                        <StyleList widget={this.props.widget}/>
+                        <StyleList widgetId={this.props.widgetId}/>
                     </Col>
                 </Row>
         ]);

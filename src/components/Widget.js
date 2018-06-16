@@ -15,7 +15,7 @@ const WIDGET = 'WIDGET';
 const widgetSourceSpec = {
     beginDrag(props, monitor, component) {
         return {
-            widget: props.widget,
+            widgetId: props.widgetId,
             offsetTop: component.widgetRef.parentElement.getBoundingClientRect().top + window.scrollY,
             maxOffset: component.widgetRef.parentElement.offsetHeight - component.widgetRef.offsetHeight
         };
@@ -24,8 +24,8 @@ const widgetSourceSpec = {
 
 const widgetTargetSpec = {
     hover(props, monitor, component) {
-        let targetWidget = props.widget;
-        let sourceWidget = monitor.getItem().widget;
+        let targetWidget = props.widgets.byId[props.widgetId];
+        let sourceWidget = props.widgets.byId[monitor.getItem().widgetId];
         if (targetWidget.position !== sourceWidget.position) {
             props.moveWidget(sourceWidget.id, targetWidget.position);
         }
@@ -50,16 +50,16 @@ const mapStateToProps = (state, ownProps) => (state);
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
     deleteWidget: () => {
-        dispatch(deleteWidget(ownProps.widget.id));
+        dispatch(deleteWidget(ownProps.widgetId));
     },
     selectWidgetType: widgetType => {
-        dispatch(selectWidgetType(ownProps.widget.id, widgetType));
+        dispatch(selectWidgetType(ownProps.widgetId, widgetType));
     },
     moveWidget: (id, position) => {
         dispatch(moveWidget(id, position))
     },
     toggleWidgetEdit: () => {
-        dispatch(toggleWidgetEdit(ownProps.widget.id));
+        dispatch(toggleWidgetEdit(ownProps.widgetId));
     }
 });
 
@@ -74,22 +74,24 @@ class Widget
 
     componentWillMount() {
         this.props.connectDragPreview(getEmptyImage());
+
     }
 
     renderWidget() {
-        switch (this.props.widget.widgetType) {
+        switch (this.props.widgets.byId[this.props.widgetId].widgetType) {
             case 'Heading':
-                return <HeadingWidget widget={this.props.widget}/>;
+                return <HeadingWidget widgetId={this.props.widgetId}/>;
             case 'Paragraph':
-                return <ParagraphWidget widget={this.props.widget}/>;
+                return <ParagraphWidget widgetId={this.props.widgetId}/>;
             default:
                 return null;
         }
     }
 
     render() {
+        let widget = this.props.widgets.byId[this.props.widgetId];
         if (this.props.previewWidgetsFlag
-            || (this.props.widgetToEdit && this.props.widgetToEdit !== this.props.widget.id)) {
+            || (this.props.widgetToEdit && this.props.widgetToEdit !== this.props.widgetId)) {
             return this.renderWidget();
         } else {
             return (
@@ -102,14 +104,14 @@ class Widget
                         <div className={`card-header form-inline ${this.props.condenseWidgetsFlag ? 'border-0' : ''}`}>
                             <div className="d-flex flex-wrap justify-content-between w-100">
                                 <div>
-                                    <h2>{this.props.widget.name || this.props.widget.widgetType + ' Widget'}</h2>
+                                    <h2>{widget.name || widget.widgetType + ' Widget'}</h2>
                                 </div>
                                 <div className="d-flex align-items-center">
                                     <select className="form-control"
                                             onChange={(event) => {
                                                 this.props.selectWidgetType(this.widgetTypeRef.value)
                                             }}
-                                            value={this.props.widget.widgetType}
+                                            value={widget.widgetType}
                                             ref={node => this.widgetTypeRef = node}>
                                         <option>Paragraph</option>
                                         <option>Heading</option>
@@ -119,13 +121,13 @@ class Widget
                                     <i className="fa fa-edit"/>
                                 </span>
                                     <span
-                                        className={`float-right ml-3 ${this.props.widget.position === 0 ? 'd-none' : ''}`}
-                                        onClick={() => (this.props.moveWidget(this.props.widget.id, this.props.widget.position - 1))}>
+                                        className={`float-right ml-3 ${widget.position === 0 ? 'd-none' : ''}`}
+                                        onClick={() => (this.props.moveWidget(widget.id, widget.position - 1))}>
                                     <i className="fa fa-arrow-up"/>
                                 </span>
                                     <span
-                                        className={`float-right ml-3 ${this.props.widget.position === this.props.widgets.length - 1 ? 'd-none' : ''}`}
-                                        onClick={() => (this.props.moveWidget(this.props.widget.id, this.props.widget.position + 1))}>
+                                        className={`float-right ml-3 ${widget.position === this.props.widgets.allIds.length - 1 ? 'd-none' : ''}`}
+                                        onClick={() => (this.props.moveWidget(this.props.widgetId, widget.position + 1))}>
                                     <i className="fa fa-arrow-down"/>
                                 </span>
                                     <span className="float-right ml-3"
@@ -137,11 +139,11 @@ class Widget
                         </div>)}
                     <CardBody className={this.props.condenseWidgetsFlag ? 'd-none' : ''}>
                         <Form>
-                            <WidgetForm widget={this.props.widget}/>
-                            {this.props.widget.widgetType === 'Heading' &&
-                            <HeadingWidgetForm widget={this.props.widget}/>}
-                            {this.props.widget.widgetType === 'Paragraph' &&
-                            <ParagraphWidgetForm widget={this.props.widget}/>}
+                            <WidgetForm widgetId={this.props.widgetId}/>
+                            {widget.widgetType === 'Heading' &&
+                            <HeadingWidgetForm widgetId={this.props.widgetId}/>}
+                            {widget.widgetType === 'Paragraph' &&
+                            <ParagraphWidgetForm widgetId={this.props.widgetId}/>}
                         </Form>
                     </CardBody>
                     <CardFooter className={this.props.condenseWidgetsFlag ? 'd-none' : ''}>

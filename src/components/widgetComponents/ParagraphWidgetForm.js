@@ -7,10 +7,10 @@ const mapStateToProps = (state, ownProps) => (state);
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
     widgetTextChanged: text => {
-        dispatch(widgetTextChanged(ownProps.widget.id, text));
+        dispatch(widgetTextChanged(ownProps.widgetId, text));
     },
     headingSizeChanged: size => {
-        dispatch(headingSizeChanged(ownProps.widget.id, size));
+        dispatch(headingSizeChanged(ownProps.widgetId, size));
     }
 });
 
@@ -19,14 +19,14 @@ class ParagraphWidgetForm
 
     render() {
         return (
-            <FormGroup key={'widget' + this.props.widget.id + 'Text'}>
-                <Label htmlFor={'widget' + this.props.widget.id + 'TextFld'}>
+            <FormGroup key={'widget' + this.props.widgetId + 'Text'}>
+                <Label htmlFor={'widget' + this.props.widgetId + 'TextFld'}>
                     Paragraph Text
                 </Label>
-                <Input id={'widget' + this.props.widget.id + 'TextFld'}
+                <Input id={'widget' + this.props.widgetId + 'TextFld'}
                        type="textarea"
                        placeholder="Enter paragraph content here."
-                       defaultValue={this.props.widget.text}
+                       defaultValue={this.props.widgets.byId[this.props.widgetId].text}
                        onChange={(event) => {
                            this.props.widgetTextChanged(event.target.value)
                        }}/>

@@ -8,14 +8,11 @@ class ClassList
     extends Component {
 
     renderClassNames() {
-        let i = 0;
-        return (
-            this.props.widget.className.map(className => (
-                <ClassName key={'widgetClass' + i++}
-                           widget={this.props.widget}
-                           className={className}/>
-            ))
-        )
+        return this.props.widgets.byId[this.props.widgetId].className.map(className => (
+            <ClassName key={className}
+                       widgetId={this.props.widgetId}
+                       className={className}/>
+        ));
     }
 
     render() {

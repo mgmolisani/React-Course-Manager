@@ -18,7 +18,7 @@ const collect = monitor => {
         currentOffset = offsetDifference.y - hiddenOffset;
     }
     return {
-        item: monitor.getItem() ? monitor.getItem().widget : null,
+        item: monitor.getItem() ? monitor.getItem().widgetId : null,
         currentOffset,
         maxOffset: monitor.getItem() ? monitor.getItem().maxOffset : null,
         isDragging: monitor.isDragging()
@@ -49,7 +49,7 @@ class CustomDragLayer
         }
 
         return (
-            <Widget widget={this.props.item} style={this.style()}/>
+            <Widget widgetId={this.props.item} style={this.style()}/>
         );
     }
 }

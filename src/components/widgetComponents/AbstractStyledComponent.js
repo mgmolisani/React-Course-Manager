@@ -11,15 +11,10 @@ export default class AbstractStyledComponent
     }
 
     createClassName() {
-         return this.props.widget.className.join(' ');
+         return this.props.widgets.byId[this.props.widgetId].className.join(' ');
     }
 
     createStyle() {
-        let style = {};
-        for (let i = 0; i < this.props.widget.style.keys.length; i++) {
-            Object.assign(style,
-                JSON.parse(`{"${this.props.widget.style.keys[i]}":"${this.props.widget.style.values[i]}"}`));
-        }
-        return style;
+        return this.props.widgets.byId[this.props.widgetId].style;
     }
 }

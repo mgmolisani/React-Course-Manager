@@ -16,7 +16,7 @@ class ClassName
     render() {
         return (
             <li>
-                {this.props.styleKey + ': ' + this.props.styleValue}
+                {this.props.styleKey + ': ' + this.props.widget.style[this.props.styleKey]}
                 <span className="float-right"
                       onClick={() => this.props.deleteWidgetStyle(this.props.styleKey)}>
                     <i className="fa fa-remove"/>

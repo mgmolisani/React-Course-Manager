@@ -44,7 +44,7 @@ class WidgetList
 
     render() {
         let widgets = this.props.widgets;
-        widgets.sort((a, b) => (a.position - b.position));
+        //widgets.allIds.sort((a, b) => (widgets.byId[a].position - widgets.byId[b].position));
         return (
             <div>
                 <div className="d-flex align-items-center justify-content-between w-100 mt-1">
@@ -85,10 +85,9 @@ class WidgetList
                 <hr className="mt-1"/>
                 <div className="position-relative">
                     <CustomDragLayer/>
-                    {this.props.widgets.map(widget => (
-                        <Widget widget={widget}
-                                key={widget.id}/>
-                    ))}
+                    {widgets.allIds.map(widgetId => (
+                        <Widget widgetId={widgetId}
+                                key={widgetId}/>))}
                 </div>
             </div>
         );

@@ -11,7 +11,7 @@ class ParagraphWidget
         return (
             <p className={this.createClassName()}
                style={this.createStyle()}>
-                {this.props.widget.text}
+                {this.props.widgets.byId[this.props.widgetId].text}
             </p>
         )
     }

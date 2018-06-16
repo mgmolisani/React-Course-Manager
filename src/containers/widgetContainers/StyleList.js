@@ -8,16 +8,12 @@ class StyleList
     extends Component {
 
     renderStyles() {
-        let style = [];
-        for (let i = 0; i < this.props.widget.style.keys.length; i++) {
-            style.push(
-                <Style key={'widgetStyle' + i}
-                       widget={this.props.widget}
-                       styleKey={this.props.widget.style.keys[i]}
-                       styleValue={this.props.widget.style.values[i]}/>
-            )
-        }
-        return style;
+        return Object.keys(this.props.widgets.byId[this.props.widgetId].style).map(key => {
+            return <Style key={key}
+                       widgetId={this.props.widgetId}
+                       styleKey={key}/>
+
+        });
     }
 
     render() {
