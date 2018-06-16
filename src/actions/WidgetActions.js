@@ -7,9 +7,7 @@ import {
     DELETE_WIDGET_CLASS,
     DELETE_WIDGET_STYLE,
     FIND_ALL_WIDGETS,
-    HEADING_SIZE_CHANGED,
-    MOVE_WIDGET_DOWN,
-    MOVE_WIDGET_UP,
+    HEADING_SIZE_CHANGED, MOVE_WIDGET,
     PREVIEW_WIDGETS,
     SAVE_WIDGETS,
     SELECT_WIDGET_TYPE,
@@ -64,14 +62,10 @@ export const headingSizeChanged = (id, size) => ({
     size
 });
 
-export const moveWidgetUp = id => ({
-    type: MOVE_WIDGET_UP,
-    id
-});
-
-export const moveWidgetDown = id => ({
-    type: MOVE_WIDGET_DOWN,
-    id
+export const moveWidget = (id, position) => ({
+    type: MOVE_WIDGET,
+    id,
+    position
 });
 
 export const widgetNameChanged = (id, name) => ({

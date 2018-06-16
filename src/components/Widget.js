@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux";
-import {deleteWidget, moveWidgetDown, moveWidgetUp, selectWidgetType, toggleWidgetEdit} from "../actions/WidgetActions";
+import {deleteWidget, moveWidget, selectWidgetType, toggleWidgetEdit} from "../actions/WidgetActions";
 import {Card, CardBody, CardFooter, CardHeader, Form, Label} from "reactstrap";
 import HeadingWidgetForm from "./widgetComponents/HeadingWidgetForm";
 import HeadingWidget from "./widgetComponents/HeadingWidget";
@@ -25,17 +25,9 @@ const widgetSourceSpec = {
 const widgetTargetSpec = {
     hover(props, monitor, component) {
         let targetWidget = props.widget;
-        console.log(targetWidget);
         let sourceWidget = monitor.getItem().widget;
-        console.log(sourceWidget);
-        if (targetWidget.position > sourceWidget.position) {
-            console.log('up');
-            props.moveWidgetUp();
-        } else if (targetWidget.position < sourceWidget.position) {
-            console.log('down');
-            props.moveWidgetDown();
-        } else {
-            console.log('what');
+        if (targetWidget.position !== sourceWidget.position) {
+            props.moveWidget(sourceWidget.id, targetWidget.position);
         }
     }
 };
@@ -63,11 +55,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     selectWidgetType: widgetType => {
         dispatch(selectWidgetType(ownProps.widget.id, widgetType));
     },
-    moveWidgetUp: () => {
-        dispatch(moveWidgetUp(ownProps.widget.id));
-    },
-    moveWidgetDown: () => {
-        dispatch(moveWidgetDown(ownProps.widget.id));
+    moveWidget: (id, position) => {
+        dispatch(moveWidget(id, position))
     },
     toggleWidgetEdit: () => {
         dispatch(toggleWidgetEdit(ownProps.widget.id));
@@ -106,7 +95,7 @@ class Widget
             return (
                 this.props.connectDropTarget(
                 <div className="card mb-3" style={Object.assign({},
-                    {opacity: this.props.isDragging ? 0.5 : 1},
+                    {opacity: this.props.isDragging ? 0.4 : 1},
                     this.props.style)}
                      ref={node => this.widgetRef = node}>
                     {this.props.connectDragSource(
@@ -131,12 +120,12 @@ class Widget
                                 </span>
                                     <span
                                         className={`float-right ml-3 ${this.props.widget.position === 0 ? 'd-none' : ''}`}
-                                        onClick={this.props.moveWidgetUp}>
+                                        onClick={() => (this.props.moveWidget(this.props.widget.id, this.props.widget.position - 1))}>
                                     <i className="fa fa-arrow-up"/>
                                 </span>
                                     <span
                                         className={`float-right ml-3 ${this.props.widget.position === this.props.widgets.length - 1 ? 'd-none' : ''}`}
-                                        onClick={this.props.moveWidgetDown}>
+                                        onClick={() => (this.props.moveWidget(this.props.widget.id, this.props.widget.position + 1))}>
                                     <i className="fa fa-arrow-down"/>
                                 </span>
                                     <span className="float-right ml-3"

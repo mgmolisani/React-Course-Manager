@@ -1,6 +1,12 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {addWidget, condenseWidgets, findAllWidgets, previewWidgets, saveWidgets} from "../actions/WidgetActions";
+import {
+    addWidget,
+    condenseWidgets,
+    findAllWidgets,
+    previewWidgets,
+    saveWidgets
+} from "../actions/WidgetActions";
 import Widget from "../components/Widget";
 import {FormGroup, Input, Label} from "reactstrap";
 import CustomDragLayer from "./CustomDragLayer";
@@ -35,7 +41,6 @@ class WidgetList
     componentDidMount() {
         this.props.findAllWidgets();
     }
-
 
     render() {
         let widgets = this.props.widgets;

@@ -1,14 +1,14 @@
 import {
     ADD_WIDGET,
     ADD_WIDGET_CLASS,
-    ADD_WIDGET_STYLE, CONDENSE_WIDGETS,
+    ADD_WIDGET_STYLE,
+    CONDENSE_WIDGETS,
     DELETE_WIDGET,
     DELETE_WIDGET_CLASS,
     DELETE_WIDGET_STYLE,
     FIND_ALL_WIDGETS,
     HEADING_SIZE_CHANGED,
-    MOVE_WIDGET_DOWN,
-    MOVE_WIDGET_UP,
+    MOVE_WIDGET,
     PREVIEW_WIDGETS,
     SAVE_WIDGETS,
     SELECT_WIDGET_TYPE,
@@ -27,7 +27,6 @@ const widgetService = widgetServiceClient.instance;
 const compareWidgets = (a, b) => (a.position - b.position);
 
 const widgetsReducer = (state = [], action) => {
-    let widgets = null;
     switch (action.type) {
         case ADD_WIDGET:
             return [...state,
@@ -84,26 +83,28 @@ const widgetsReducer = (state = [], action) => {
                 }
                 return widget;
             });
-        case MOVE_WIDGET_UP:
-            widgets = [...state];
-            for (let i = 1; i < widgets.length; i++) {
-                if (widgets[i].id === action.id) {
-                    let tempPosition = widgets[i].position;
-                    widgets[i].position =  widgets[i - 1].position;
-                    widgets[i - 1].position = tempPosition;
-                }
-            }
-            return widgets.sort(compareWidgets);
-        case MOVE_WIDGET_DOWN:
-            widgets = [...state];
-            for (let i = 0; i < widgets.length - 1; i++) {
-                if (widgets[i].id === action.id) {
-                    let tempPosition = widgets[i].position;
-                    widgets[i].position =  widgets[i + 1].position;
-                    widgets[i + 1].position = tempPosition;
-                }
-            }
-            return widgets.sort(compareWidgets);
+        case MOVE_WIDGET:
+            return (() => {
+                let sourceWidget = state.find(widget => (widget.id === action.id));
+                let sourcePosition = sourceWidget.position;
+                let targetPosition = action.position;
+                let direction =  sourcePosition - targetPosition;
+                let widgets = state.map((widget) => {
+                    if (direction > 0
+                        && widget.position >= targetPosition
+                        && widget.position < sourcePosition) {
+                        widget.position += 1;
+                    } else if (direction < 0
+                        && widget.position <= targetPosition
+                        && widget.position > sourcePosition) {
+                        widget.position -= 1;
+                    } else if (widget.position === sourcePosition) {
+                        widget.position = targetPosition;
+                    }
+                    return widget;
+                });
+                return widgets.sort(compareWidgets);
+            })();
         case WIDGET_NAME_CHANGED:
             return state.map(widget => {
                 if (widget.id === action.id) {
