@@ -74,10 +74,10 @@ export const widgetNameChanged = (id, name) => ({
     name
 });
 
-export const widgetClassChanged = (id, className) => ({
+export const widgetClassChanged = (id, classToAdd) => ({
     type: WIDGET_CLASS_CHANGED,
     id,
-    className
+    classToAdd
 });
 
 export const addWidgetClass = id => ({
@@ -91,16 +91,16 @@ export const deleteWidgetClass = (id, className) => ({
     className
 });
 
-export const widgetStyleKeyChanged = (id, styleKey) => ({
+export const widgetStyleKeyChanged = (id, styleKeyToAdd) => ({
     type: WIDGET_STYLE_KEY_CHANGED,
     id,
-    styleKey
+    styleKeyToAdd
 });
 
-export const widgetStyleValueChanged = (id, styleValue) => ({
+export const widgetStyleValueChanged = (id, styleValueToAdd) => ({
     type: WIDGET_STYLE_VALUE_CHANGED,
     id,
-    styleValue
+    styleValueToAdd
 });
 
 export const addWidgetStyle = id => ({

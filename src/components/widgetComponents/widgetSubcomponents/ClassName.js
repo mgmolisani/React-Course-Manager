@@ -6,7 +6,7 @@ const mapStateToProps = (state, ownProps) => (state);
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
     deleteWidgetClass: className => {
-        dispatch(deleteWidgetClass(ownProps.widget.id, className));
+        dispatch(deleteWidgetClass(ownProps.widgetId, className));
     }
 });
 

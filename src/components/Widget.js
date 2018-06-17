@@ -90,6 +90,7 @@ class Widget
 
     render() {
         let widget = this.props.widgets.byId[this.props.widgetId];
+        console.log(this.props.widgets);
         if (this.props.previewWidgetsFlag
             || (this.props.widgetToEdit && this.props.widgetToEdit !== this.props.widgetId)) {
             return this.renderWidget();

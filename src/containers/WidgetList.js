@@ -44,7 +44,6 @@ class WidgetList
 
     render() {
         let widgets = this.props.widgets;
-        //widgets.allIds.sort((a, b) => (widgets.byId[a].position - widgets.byId[b].position));
         return (
             <div>
                 <div className="d-flex align-items-center justify-content-between w-100 mt-1">

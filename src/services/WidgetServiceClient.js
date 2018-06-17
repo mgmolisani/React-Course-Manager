@@ -28,22 +28,43 @@ export default class WidgetServiceClient {
 
 
     findAllWidgets(callback) {
-        let id = 1;
         return {
             byId: {
-                [id]:
+                1:
                     {
-                        id,
+                        id: 1,
                         text: '',
                         widgetType: 'Paragraph',
                         position: 0,
                         size: 2,
-                        name: 'New Widget',
+                        name: '1',
+                        className: [],
+                        style: {}
+                    },
+                2:
+                    {
+                        id: 2,
+                        text: '',
+                        widgetType: 'Paragraph',
+                        position: 1,
+                        size: 2,
+                        name: '2',
+                        className: [],
+                        style: {}
+                    },
+                3:
+                    {
+                        id: 3,
+                        text: '',
+                        widgetType: 'Paragraph',
+                        position: 2,
+                        size: 2,
+                        name: '3',
                         className: [],
                         style: {}
                     }
             },
-            allIds: [1]
+            allIds: [1, 2, 3]
         }
         /*return fetch(LESSON_API_URL)
             .then(function (response) {

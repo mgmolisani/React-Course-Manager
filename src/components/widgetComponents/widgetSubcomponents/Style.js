@@ -6,7 +6,7 @@ const mapStateToProps = (state, ownProps) => (state);
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
     deleteWidgetStyle: styleKey => {
-        dispatch(deleteWidgetStyle(ownProps.widget.id, styleKey));
+        dispatch(deleteWidgetStyle(ownProps.widgetId, styleKey));
     }
 });
 
@@ -16,7 +16,7 @@ class ClassName
     render() {
         return (
             <li>
-                {this.props.styleKey + ': ' + this.props.widget.style[this.props.styleKey]}
+                {this.props.styleKey + ': ' + this.props.widgets.byId[this.props.widgetId].style[this.props.styleKey]}
                 <span className="float-right"
                       onClick={() => this.props.deleteWidgetStyle(this.props.styleKey)}>
                     <i className="fa fa-remove"/>

@@ -24,9 +24,9 @@ import {combineReducers} from "redux";
 
 const widgetService = widgetServiceClient.instance;
 
-const sortWidgets = (state) => {
-    return function(a, b) {
-        return (state.byId[a].position - state.byId[b].position)
+const sortWidgets = (widgets) => {
+    return function (a, b) {
+        return (widgets[a].position - widgets[b].position)
     }
 };
 
@@ -51,7 +51,8 @@ const widgetsReducer = (state = {
                             size: 2,
                             name: 'New Widget',
                             className: [],
-                            style: {}
+                            style: {},
+                            classToAdd: ''
                         }
                 },
                 allIds: [...state.allIds, id]
@@ -60,8 +61,14 @@ const widgetsReducer = (state = {
             return {
                 ...state,
                 byId: state.allIds.reduce((widgets, key) => {
+                    let widget = {
+                        ...state.byId[key]
+                    };
                     if (key !== action.id) {
-                        widgets[key] = state.byId[key];
+                        if (widget.position > state.byId[action.id].position) {
+                            widget.position -= 1;
+                        }
+                        widgets[key] = widget;
                     }
                     return widgets;
                 }, {}),
@@ -114,27 +121,31 @@ const widgetsReducer = (state = {
                 let sourcePosition = sourceWidget.position;
                 let targetPosition = action.position;
                 let direction = sourcePosition - targetPosition;
-                return {
-                    ...state,
-                    byId: state.allIds.reduce((widgets, key) => {
-                        let widget = state.byId[key];
+                let widgets = state.allIds.reduce((widgets, key) => {
+                        let widget = {
+                            ...state.byId[key]
+                        };
+                        let position = widget.position;
                         if (direction > 0
-                            && widget.position >= targetPosition
-                            && widget.position < sourcePosition) {
+                            && position >= targetPosition
+                            && position < sourcePosition) {
                             widget.position += 1;
                         } else if (direction < 0
-                            && widget.position <= targetPosition
-                            && widget.position > sourcePosition) {
+                            && position <= targetPosition
+                            && position > sourcePosition) {
                             widget.position -= 1;
-                        } else if (widget.position === sourcePosition) {
+                        } else if (position === sourcePosition) {
                             widget.position = targetPosition;
                         }
                         return {
                             ...widgets,
                             [key]: widget
                         };
-                    }, {}),
-                    allIds: [...state.allIds].sort(sortWidgets(state))
+                    }, {});
+                return {
+                    ...state,
+                    byId: widgets,
+                    allIds: [...state.allIds].sort(sortWidgets(widgets))
                 };
             })();
         case WIDGET_NAME_CHANGED:
@@ -169,7 +180,7 @@ const widgetsReducer = (state = {
                         if (!widget.className.includes(widget.classToAdd)) {
                             return {
                                 ...widget,
-                                className: [...widget.className, widget.className],
+                                className: [...widget.className, widget.classToAdd],
                                 classToAdd: ''
                             };
                         }
@@ -242,10 +253,11 @@ const widgetsReducer = (state = {
                     ...state.byId,
                     [action.id]: {
                         ...state.byId[action.id],
-                        style: state.byId[action.id].style.reduce((styles, key) => {
+                        style: Object.keys(state.byId[action.id].style).reduce((styles, key) => {
                             if (key !== action.styleKey) {
                                 styles[key] = state.byId[action.id].style[key];
                             }
+                            return styles;
                         }, {}),
                     }
                 }
