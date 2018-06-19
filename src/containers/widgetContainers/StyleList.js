@@ -4,9 +4,16 @@ import Style from "../../components/widgetComponents/widgetSubcomponents/Style";
 
 const mapStateToProps = (state, ownProps) => (state);
 
+/**
+ * Class to contain a list of styles
+ */
 class StyleList
     extends Component {
 
+    /**
+     * Renders all of the styles.
+     * @returns {any[]}
+     */
     renderStyles() {
         return Object.keys(this.props.widgets.byId[this.props.widgetId].style).map(key => {
             return <Style key={key}

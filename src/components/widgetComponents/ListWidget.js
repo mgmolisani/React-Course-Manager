@@ -2,8 +2,17 @@ import {connect} from "react-redux";
 import React from "react";
 import AbstractStyledComponent from "./AbstractStyledComponent";
 
+/**
+ * State mapper
+ * @param state
+ * @param ownProps
+ * @returns {*}
+ */
 const mapStateToProps = (state, ownProps) => (state);
 
+/**
+ * Represents a list widget fully previewed
+ */
 class ListWidget
     extends AbstractStyledComponent {
 

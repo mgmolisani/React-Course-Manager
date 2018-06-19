@@ -3,8 +3,20 @@ import {connect} from "react-redux";
 import {linkChanged, widgetTextChanged} from "../../actions/WidgetActions";
 import {FormGroup, Input, Label} from "reactstrap";
 
+/**
+ * State mapper
+ * @param state
+ * @param ownProps
+ * @returns {*}
+ */
 const mapStateToProps = (state, ownProps) => (state);
 
+/**
+ * Dispatch mapper
+ * @param dispatch
+ * @param ownProps
+ * @returns {{widgetTextChanged: widgetTextChanged, linkChanged: linkChanged}}
+ */
 const mapDispatchToProps = (dispatch, ownProps) => ({
     widgetTextChanged: text => {
         dispatch(widgetTextChanged(ownProps.widgetId, text));
@@ -14,6 +26,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     }
 });
 
+/**
+ * Represents the specific parts of link widgets
+ */
 class LinkWidgetForm
     extends Component {
 

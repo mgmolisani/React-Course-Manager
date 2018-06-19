@@ -16,8 +16,16 @@ import ImageWidgetForm from "./widgetComponents/ImageWidgetForm";
 import ListWidget from "./widgetComponents/ListWidget";
 import ListWidgetForm from "./widgetComponents/ListWidgetForm";
 
+/**
+ * The type recognized for drag and drop
+ * @type {string}
+ */
 const WIDGET = 'WIDGET';
 
+/**
+ * The drag source specs
+ * @type {{beginDrag(*, *, *): *}}
+ */
 const widgetSourceSpec = {
     beginDrag(props, monitor, component) {
         return {
@@ -28,6 +36,10 @@ const widgetSourceSpec = {
     }
 };
 
+/**
+ * The drag drop location specs
+ * @type {{hover(*, *, *): void}}
+ */
 const widgetTargetSpec = {
     hover(props, monitor, component) {
         let targetWidget = props.widgets.byId[props.widgetId];
@@ -38,6 +50,12 @@ const widgetTargetSpec = {
     }
 };
 
+/**
+ * The connector for dragging
+ * @param connect
+ * @param monitor
+ * @returns {{connectDragSource: ConnectDragSource | * | undefined, connectDragPreview: ConnectDragPreview | * | undefined, isDragging: boolean | *}}
+ */
 function collectDrag(connect, monitor) {
     return {
         connectDragSource: connect.dragSource(),
@@ -46,14 +64,32 @@ function collectDrag(connect, monitor) {
     }
 }
 
+/**
+ * The connector for dropping
+ * @param connect
+ * @param monitor
+ * @returns {{connectDropTarget: ConnectDropTarget | * | undefined}}
+ */
 function collectDrop(connect, monitor) {
     return {
         connectDropTarget: connect.dropTarget()
     }
 }
 
+/**
+ * State mapper
+ * @param state
+ * @param ownProps
+ * @returns {*}
+ */
 const mapStateToProps = (state, ownProps) => (state);
 
+/**
+ * Dispatch mapper
+ * @param dispatch
+ * @param ownProps
+ * @returns {{deleteWidget: deleteWidget, selectWidgetType: selectWidgetType, moveWidget: moveWidget, toggleWidgetEdit: toggleWidgetEdit}}
+ */
 const mapDispatchToProps = (dispatch, ownProps) => ({
     deleteWidget: () => {
         dispatch(deleteWidget(ownProps.widgetId));
@@ -69,20 +105,34 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     }
 });
 
+/**
+ * A class to represent a widget
+ */
 class Widget
     extends Component {
 
+    /**
+     * Adds the refs
+     * @param props
+     */
     constructor(props) {
         super(props);
         this.widgetTypeRef = null;
         this.widgetRef = null;
     }
 
+    /**
+     * Connects the drag custom image layer
+     */
     componentWillMount() {
         this.props.connectDragPreview(getEmptyImage());
 
     }
 
+    /**
+     * Renders the correct widget
+     * @returns {*}
+     */
     renderWidget() {
         switch (this.props.widgets.byId[this.props.widgetId].widgetType) {
             case 'Heading':

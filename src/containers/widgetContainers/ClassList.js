@@ -4,9 +4,16 @@ import ClassName from "../../components/widgetComponents/widgetSubcomponents/Cla
 
 const mapStateToProps = (state, ownProps) => (state);
 
+/**
+ * Class to represent a class container component
+ */
 class ClassList
     extends Component {
 
+    /**
+     * Renders the list of classes
+     * @returns {*}
+     */
     renderClassNames() {
         return this.props.widgets.byId[this.props.widgetId].className.map(className => (
             <ClassName key={className}

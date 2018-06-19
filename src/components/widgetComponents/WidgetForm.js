@@ -12,8 +12,20 @@ import ClassList from "../../containers/widgetContainers/ClassList";
 import StyleList from "../../containers/widgetContainers/StyleList";
 import {connect} from "react-redux";
 
+/**
+ * State mapper
+ * @param state
+ * @param ownProps
+ * @returns {*}
+ */
 const mapStateToProps = (state, ownProps) => (state);
 
+/**
+ * Dispatch mapper
+ * @param dispatch
+ * @param ownProps
+ * @returns {{widgetNameChanged: widgetNameChanged, widgetClassChanged: widgetClassChanged, addWidgetClass: addWidgetClass, widgetStyleKeyChanged: widgetStyleKeyChanged, widgetStyleValueChanged: widgetStyleValueChanged, addWidgetStyle: addWidgetStyle}}
+ */
 const mapDispatchToProps = (dispatch, ownProps) => ({
     widgetNameChanged: name => {
         dispatch(widgetNameChanged(ownProps.widgetId, name));
@@ -35,6 +47,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     }
 });
 
+/**
+ * Represents the shared parts of a widget form
+ */
 class WidgetForm
     extends Component {
 

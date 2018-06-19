@@ -3,6 +3,12 @@ import {connect} from "react-redux";
 import {widgetTextChanged} from "../../actions/WidgetActions";
 import {FormGroup, Input, Label} from "reactstrap";
 
+/**
+ * State mapper
+ * @param state
+ * @param ownProps
+ * @returns {*}
+ */
 const mapStateToProps = (state, ownProps) => (state);
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -11,6 +17,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     }
 });
 
+/**
+ * Specific parts of a paragraph form
+ */
 class ParagraphWidgetForm
     extends Component {
 

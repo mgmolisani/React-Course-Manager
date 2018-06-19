@@ -30,6 +30,12 @@ const sortWidgets = (widgets) => {
     }
 };
 
+/**
+ * Reducer for the widgets state
+ * @param state
+ * @param action
+ * @returns {*}
+ */
 const widgetsReducer = (state = {
                             byId: {},
                             allIds: []
@@ -37,7 +43,7 @@ const widgetsReducer = (state = {
                         action) => {
     switch (action.type) {
         case ADD_WIDGET:
-            let id = Date.now();
+            let id = Date.now() / 1000;
             return {
                 ...state,
                 byId: {
@@ -335,6 +341,12 @@ const widgetsReducer = (state = {
     }
 };
 
+/**
+ * Reducer for the preview state
+ * @param state
+ * @param action
+ * @returns {boolean}
+ */
 const previewReducer = (state = false, action) => {
     switch (action.type) {
         case PREVIEW_WIDGETS:
@@ -344,6 +356,12 @@ const previewReducer = (state = false, action) => {
     }
 };
 
+/**
+ * Reducer for the edit state
+ * @param state
+ * @param action
+ * @returns {*}
+ */
 const editReducer = (state = null, action) => {
     switch (action.type) {
         case TOGGLE_WIDGET_EDIT:
@@ -353,6 +371,12 @@ const editReducer = (state = null, action) => {
     }
 };
 
+/**
+ * Reducer for condense state for easier drag and drop
+ * @param state
+ * @param action
+ * @returns {boolean}
+ */
 const condenseReducer = (state = false, action) => {
     switch (action.type) {
         case CONDENSE_WIDGETS:
@@ -362,6 +386,10 @@ const condenseReducer = (state = false, action) => {
     }
 };
 
+/**
+ * Combination of all reducers
+ * @type {Reducer<any> | Reducer<any, AnyAction>}
+ */
 export const reducer = combineReducers({
     widgets: widgetsReducer,
     previewWidgetsFlag: previewReducer,

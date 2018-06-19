@@ -1,6 +1,5 @@
 let _singleton = Symbol();
-const WIDGET_API_URL = 'http://localhost:8080/api/widget';
-const WIDGET_BY_LESSON_API_URL = 'http://localhost:8080/api/lesson/LID/widget';
+const WIDGET_BY_LESSON_API_URL = 'https://mmolisani-course-manager.herokuapp.com/api/lesson/LID/widget';
 
 /**
  * Generic error callback that returns the error from the server as a JS error
@@ -26,7 +25,12 @@ export default class WidgetServiceClient {
         return this[_singleton]
     }
 
-
+    /**
+     * API to find all widgets for a lesson
+     * @param lessonId the lesson
+     * @param callback the callback to format the data
+     * @returns {Promise<Response>}
+     */
     findAllWidgetsForLesson(lessonId, callback) {
         return fetch(WIDGET_BY_LESSON_API_URL
             .replace('LID', lessonId))
@@ -39,6 +43,13 @@ export default class WidgetServiceClient {
             });
     }
 
+    /**
+     * Saves all of the widgets
+     * @param widgets the widgets to save
+     * @param lessonId the lesson to save them to
+     * @param callback the callback to say the widgets were saved
+     * @returns {Promise<Response>}
+     */
     saveAllWidgets(widgets, lessonId, callback) {
         return fetch(WIDGET_BY_LESSON_API_URL
             .replace('LID', lessonId)
@@ -55,4 +66,8 @@ export default class WidgetServiceClient {
             return response.json().then(errorCallback);
         });
     }
+
+    /*
+    NO OTHER APIS WERE NECESSARY FOR THIS ASSIGNMENT HOWEVER THE ENDPOINTS FOR OTHER OPERATIONS DO EXIST
+     */
 }

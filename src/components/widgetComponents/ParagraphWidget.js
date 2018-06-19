@@ -2,8 +2,17 @@ import {connect} from "react-redux";
 import React from "react";
 import AbstractStyledComponent from "./AbstractStyledComponent";
 
+/**
+ * state mapper
+ * @param state
+ * @param ownProps
+ * @returns {*}
+ */
 const mapStateToProps = (state, ownProps) => (state);
 
+/**
+ * Represents a paragraph widget fully previewed
+ */
 class ParagraphWidget
     extends AbstractStyledComponent {
 

@@ -11,8 +11,20 @@ import Widget from "../components/Widget";
 import {Input, Label} from "reactstrap";
 import CustomDragLayer from "./CustomDragLayer";
 
+/**
+ * State mapper
+ * @param state
+ * @param ownProps
+ * @returns {*}
+ */
 const mapStateToProps = (state, ownProps) => (state);
 
+/**
+ * Dispatch mapper
+ * @param dispatch
+ * @param ownProps
+ * @returns {{addWidget: addWidget, saveWidgets: saveWidgets, findAllWidgetsForLesson: (function(): void), previewWidgets: previewWidgets, condenseWidgets: condenseWidgets}}
+ */
 const mapDispatchToProps = (dispatch, ownProps) => ({
     addWidget: () => {
         dispatch(addWidget())
@@ -33,9 +45,15 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     }
 });
 
+/**
+ * Class to represent a widget list component
+ */
 class WidgetList
     extends Component {
 
+    /**
+     * Initial gathering of widgets for the state
+     */
     componentDidMount() {
         this.props.findAllWidgetsForLesson();
     }

@@ -3,8 +3,20 @@ import {connect} from "react-redux";
 import {imageChanged, imageHeightChanged, imageWidthChanged, widgetTextChanged} from "../../actions/WidgetActions";
 import {Col, FormGroup, Input, Label, Row} from "reactstrap";
 
+/**
+ * State mapper
+ * @param state
+ * @param ownProps
+ * @returns {*}
+ */
 const mapStateToProps = (state, ownProps) => (state);
 
+/**
+ * Dispatch mapper
+ * @param dispatch
+ * @param ownProps
+ * @returns {{widgetTextChanged: widgetTextChanged, imageChanged: imageChanged, imageWidthChanged: imageWidthChanged, imageHeightChanged: imageHeightChanged}}
+ */
 const mapDispatchToProps = (dispatch, ownProps) => ({
     widgetTextChanged: text => {
         dispatch(widgetTextChanged(ownProps.widgetId, text));
@@ -20,6 +32,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     }
 });
 
+/**
+ * Represents the specific parts of an image widget
+ */
 class ImageWidgetForm
     extends Component {
 
