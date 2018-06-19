@@ -31,7 +31,6 @@ class ListWidget
 
     render() {
         let widget = this.props.widgets.byId[this.props.widgetId];
-        console.log(widget.listType);
         switch (widget.listType) {
             case 'Ordered':
                 return (

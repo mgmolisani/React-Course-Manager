@@ -33,7 +33,6 @@ class LinkWidgetForm
     extends Component {
 
     render() {
-        console.log(this.props.widgets.byId[this.props.widgetId]);
         return ([
             <FormGroup key={'widget' + this.props.widgetId + 'Link'}>
                 <Label htmlFor={'widget' + this.props.widgetId + 'LinkFld'}>
