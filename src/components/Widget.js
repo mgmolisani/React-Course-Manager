@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux";
 import {deleteWidget, moveWidget, selectWidgetType, toggleWidgetEdit} from "../actions/WidgetActions";
-import {Card, CardBody, CardFooter, CardHeader, Form, Label} from "reactstrap";
+import {CardBody, CardFooter, Form, Label} from "reactstrap";
 import HeadingWidgetForm from "./widgetComponents/HeadingWidgetForm";
 import HeadingWidget from "./widgetComponents/HeadingWidget";
 import WidgetForm from "./widgetComponents/WidgetForm";
@@ -9,6 +9,12 @@ import ParagraphWidgetForm from "./widgetComponents/ParagraphWidgetForm";
 import ParagraphWidget from "./widgetComponents/ParagraphWidget";
 import {DragSource, DropTarget} from "react-dnd";
 import {getEmptyImage} from "react-dnd-html5-backend";
+import LinkWidgetForm from "./widgetComponents/LinkWidgetForm";
+import LinkWidget from "./widgetComponents/LinkWidget";
+import ImageWidget from "./widgetComponents/ImageWidget";
+import ImageWidgetForm from "./widgetComponents/ImageWidgetForm";
+import ListWidget from "./widgetComponents/ListWidget";
+import ListWidgetForm from "./widgetComponents/ListWidgetForm";
 
 const WIDGET = 'WIDGET';
 
@@ -83,6 +89,12 @@ class Widget
                 return <HeadingWidget widgetId={this.props.widgetId}/>;
             case 'Paragraph':
                 return <ParagraphWidget widgetId={this.props.widgetId}/>;
+            case 'Link':
+                return <LinkWidget widgetId={this.props.widgetId}/>;
+            case 'Image':
+                return <ImageWidget widgetId={this.props.widgetId}/>;
+            case 'List':
+                return <ListWidget widgetId={this.props.widgetId}/>;
             default:
                 return null;
         }
@@ -90,7 +102,6 @@ class Widget
 
     render() {
         let widget = this.props.widgets.byId[this.props.widgetId];
-        console.log(this.props.widgets);
         if (this.props.previewWidgetsFlag
             || (this.props.widgetToEdit && this.props.widgetToEdit !== this.props.widgetId)) {
             return this.renderWidget();
@@ -116,6 +127,9 @@ class Widget
                                             ref={node => this.widgetTypeRef = node}>
                                         <option>Paragraph</option>
                                         <option>Heading</option>
+                                        <option>Link</option>
+                                        <option>Image</option>
+                                        <option>List</option>
                                     </select>
                                     <span className={`float-right ml-3`}
                                           onClick={this.props.toggleWidgetEdit}>
@@ -145,6 +159,12 @@ class Widget
                             <HeadingWidgetForm widgetId={this.props.widgetId}/>}
                             {widget.widgetType === 'Paragraph' &&
                             <ParagraphWidgetForm widgetId={this.props.widgetId}/>}
+                            {widget.widgetType === 'Link' &&
+                            <LinkWidgetForm widgetId={this.props.widgetId}/>}
+                            {widget.widgetType === 'Image' &&
+                            <ImageWidgetForm widgetId={this.props.widgetId}/>}
+                            {widget.widgetType === 'List' &&
+                            <ListWidgetForm widgetId={this.props.widgetId}/>}
                         </Form>
                     </CardBody>
                     <CardFooter className={this.props.condenseWidgetsFlag ? 'd-none' : ''}>
