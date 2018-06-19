@@ -2,12 +2,19 @@ import WidgetServiceClient from "../services/WidgetServiceClient";
 import {
     ADD_WIDGET,
     ADD_WIDGET_CLASS,
-    ADD_WIDGET_STYLE, CONDENSE_WIDGETS,
+    ADD_WIDGET_STYLE,
+    CONDENSE_WIDGETS,
     DELETE_WIDGET,
     DELETE_WIDGET_CLASS,
     DELETE_WIDGET_STYLE,
     FIND_ALL_WIDGETS,
-    HEADING_SIZE_CHANGED, MOVE_WIDGET,
+    HEADING_SIZE_CHANGED,
+    IMAGE_CHANGED,
+    IMAGE_HEIGHT_CHANGED,
+    IMAGE_WIDTH_CHANGED,
+    LINK_CHANGED,
+    LIST_TYPE_CHANGED,
+    MOVE_WIDGET,
     PREVIEW_WIDGETS,
     SAVE_WIDGETS,
     SELECT_WIDGET_TYPE,
@@ -25,8 +32,9 @@ export const addWidget = () => ({
     type: ADD_WIDGET
 });
 
-export const saveWidgets = () => ({
-    type: SAVE_WIDGETS
+export const saveWidgets = lessonId => ({
+    type: SAVE_WIDGETS,
+    lessonId
 });
 
 export const deleteWidget = id => ({
@@ -34,11 +42,20 @@ export const deleteWidget = id => ({
     id
 });
 
-export const findAllWidgets = () => ({
-    type: FIND_ALL_WIDGETS,
-    widgets: widgetService
-        .findAllWidgets()
-});
+export const findAllWidgetsForLesson = (dispatch, lessonId) => {
+    widgetService.findAllWidgetsForLesson(lessonId,
+        widgets => dispatch({
+            type: FIND_ALL_WIDGETS,
+            widgets: widgets.reduce((widgetsState, widget) => {
+                widgetsState.byId[widget.id] = widget;
+                widgetsState.allIds.push(widget.id);
+                return widgetsState;
+            }, {
+                byId: {},
+                allIds: []
+            })
+        }));
+};
 
 export const previewWidgets = () => ({
     type: PREVIEW_WIDGETS
@@ -121,4 +138,34 @@ export const toggleWidgetEdit = (id) => ({
 
 export const condenseWidgets = () => ({
     type: CONDENSE_WIDGETS
+});
+
+export const linkChanged = (id, link) => ({
+    type: LINK_CHANGED,
+    id,
+    link
+});
+
+export const imageChanged = (id, image) => ({
+    type: IMAGE_CHANGED,
+    id,
+    image
+});
+
+export const imageWidthChanged = (id, width) => ({
+    type: IMAGE_WIDTH_CHANGED,
+    id,
+    width
+});
+
+export const imageHeightChanged = (id, height) => ({
+    type: IMAGE_HEIGHT_CHANGED,
+    id,
+    height
+});
+
+export const listTypeChanged = (id, listType) => ({
+    type: LIST_TYPE_CHANGED,
+    id,
+    listType
 });

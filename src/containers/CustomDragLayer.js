@@ -20,6 +20,7 @@ const collect = monitor => {
     return {
         item: monitor.getItem() ? monitor.getItem().widgetId : null,
         currentOffset,
+        itemType: monitor.getItemType(),
         maxOffset: monitor.getItem() ? monitor.getItem().maxOffset : null,
         isDragging: monitor.isDragging()
     }
@@ -48,9 +49,13 @@ class CustomDragLayer
             return null;
         }
 
-        return (
-            <Widget widgetId={this.props.item} style={this.style()}/>
-        );
+        if (this.props.itemType === 'WIDGET') {
+            return (
+                <Widget widgetId={this.props.item} style={this.style()}/>
+            );
+        } else {
+            return null;
+        }
     }
 }
 

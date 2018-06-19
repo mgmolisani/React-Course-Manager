@@ -1,6 +1,6 @@
 let _singleton = Symbol();
-const WIDGET_API_URL = 'http://localhost:3000/api/lesson';
-const WIDGET_BY_LESSON_API_URL = 'http://localhost:3000/api/lesson/LID';
+const WIDGET_API_URL = 'http://localhost:8080/api/widget';
+const WIDGET_BY_LESSON_API_URL = 'http://localhost:8080/api/lesson/LID/widget';
 
 /**
  * Generic error callback that returns the error from the server as a JS error
@@ -27,53 +27,32 @@ export default class WidgetServiceClient {
     }
 
 
-    findAllWidgets(callback) {
-        return {
-            byId: {
-                1:
-                    {
-                        id: 1,
-                        text: '',
-                        widgetType: 'Paragraph',
-                        position: 0,
-                        size: 2,
-                        name: '1',
-                        className: [],
-                        style: {}
-                    },
-                2:
-                    {
-                        id: 2,
-                        text: '',
-                        widgetType: 'Paragraph',
-                        position: 1,
-                        size: 2,
-                        name: '2',
-                        className: [],
-                        style: {}
-                    },
-                3:
-                    {
-                        id: 3,
-                        text: '',
-                        widgetType: 'Paragraph',
-                        position: 2,
-                        size: 2,
-                        name: '3',
-                        className: [],
-                        style: {}
-                    }
-            },
-            allIds: [1, 2, 3]
-        }
-        /*return fetch(LESSON_API_URL)
+    findAllWidgetsForLesson(lessonId, callback) {
+        return fetch(WIDGET_BY_LESSON_API_URL
+            .replace('LID', lessonId))
             .then(function (response) {
-                return response.json();
-            }).then(callback);*/
-        //SORT THIS SHIT HERE OR IN CALLBACK (PROBS IN CALLBACK)
+                let responseJson = response.json();
+                if (response.ok) {
+                    return responseJson.then(callback);
+                }
+                return responseJson.then(errorCallback);
+            });
     }
 
-    saveAllWidgets(widgets, callback) {
-        return widgets;
+    saveAllWidgets(widgets, lessonId, callback) {
+        return fetch(WIDGET_BY_LESSON_API_URL
+            .replace('LID', lessonId)
+            + '/save', {
+            method: 'POST',
+            body: JSON.stringify(widgets),
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(function (response) {
+            if (response.ok) {
+                return response.text().then(callback);
+            }
+            return response.json().then(errorCallback);
+        });
     }
 }

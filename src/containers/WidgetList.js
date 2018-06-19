@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {
     addWidget,
     condenseWidgets,
-    findAllWidgets,
+    findAllWidgetsForLesson,
     previewWidgets,
     saveWidgets
 } from "../actions/WidgetActions";
@@ -19,12 +19,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
 
     saveWidgets: () => {
-        dispatch(saveWidgets())
+        dispatch(saveWidgets(ownProps.lessonId))
     },
 
-    findAllWidgets: () => {
-        dispatch(findAllWidgets())
-    },
+    findAllWidgetsForLesson: () => findAllWidgetsForLesson(dispatch, ownProps.lessonId),
 
     previewWidgets: () => {
         dispatch(previewWidgets())
@@ -39,7 +37,7 @@ class WidgetList
     extends Component {
 
     componentDidMount() {
-        this.props.findAllWidgets();
+        this.props.findAllWidgetsForLesson();
     }
 
     render() {
